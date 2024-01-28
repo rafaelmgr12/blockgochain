@@ -9,6 +9,7 @@ type Block struct {
 	Hash     string
 	Data     string
 	PrevHash string
+	Nonce    int
 }
 
 func (b *Block) ComputeHash() {
