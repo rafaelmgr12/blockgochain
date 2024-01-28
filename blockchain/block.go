@@ -18,3 +18,13 @@ func (b *Block) ComputeHash() {
 
 	b.Hash = string(computedHash[:])
 }
+
+func CreateBlock(data string, preHash string) *Block {
+	block := &Block{Data: data, PrevHash: preHash}
+	block.ComputeHash()
+	return block
+}
+
+func GenesisBlock() *Block {
+	return CreateBlock("Genesis", "")
+}
