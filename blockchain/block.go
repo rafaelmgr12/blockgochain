@@ -25,6 +25,6 @@ func CreateBlock(data string, preHash string) *Block {
 	return block
 }
 
-func GenesisBlock() *Block {
+func Genesis() *Block {
 	return CreateBlock("Genesis", "")
 }
