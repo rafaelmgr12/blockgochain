@@ -3,13 +3,16 @@ package blockchain
 import (
 	"bytes"
 	"crypto/md5"
+	"math/rand"
+	"time"
 )
 
 type Block struct {
-	Hash     string
-	Data     string
-	PrevHash string
-	Nonce    int
+	Hash        string
+	Data        string
+	PrevHash    string
+	Nonce       int
+	Transaction []*Transaction
 }
 
 func (b *Block) ComputeHash() {
@@ -20,12 +23,30 @@ func (b *Block) ComputeHash() {
 	b.Hash = string(computedHash[:])
 }
 
-func CreateBlock(data string, preHash string) *Block {
-	block := &Block{Data: data, PrevHash: preHash}
-	block.ComputeHash()
+func CreateBlock(data string, prevHash string, transactions []*Transaction) *Block {
+	rand.Seed(time.Now().UnixNano())
+
+	initialNonce := rand.Intn(10000)
+
+	block := &Block{"", data, prevHash, initialNonce, transactions}
+
+	newPow := NewProofOfWork(block)
+
+	nonce, hash := newPow.MineBlock()
+
+	block.Hash = string(hash[:])
+	block.Nonce = nonce
+
 	return block
 }
 
 func Genesis() *Block {
-	return CreateBlock("Genesis", "")
+	coinbaseTransaction := &Transaction{
+		Sender:   "Coinbase",
+		Receiver: "Genesis",
+		Amount:   0.0,
+		Coinbase: true,
+	}
+
+	return CreateBlock("Genesis", "", []*Transaction{coinbaseTransaction})
 }
