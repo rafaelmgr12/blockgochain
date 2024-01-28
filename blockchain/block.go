@@ -8,11 +8,11 @@ import (
 )
 
 type Block struct {
-	Hash        string
-	Data        string
-	PrevHash    string
-	Nonce       int
-	Transaction []*Transaction
+	Hash         string
+	Data         string
+	PrevHash     string
+	Nonce        int
+	Transactions []*Transaction
 }
 
 func (b *Block) ComputeHash() {
